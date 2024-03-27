@@ -4,14 +4,19 @@ from django.conf import settings
 
 # Table for name of countries
 class Country(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(unique=True, max_length=100)
 
     def __str__(self):
         return self.name
 
+    @classmethod
+    def create_bulk(cls, data_list):
+        countries = [cls(name=data['name']) for data in data_list]
+        return cls.objects.bulk_create(countries)
+
 
 class City(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(unique=True,max_length=100)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
 
     def __str__(self):
