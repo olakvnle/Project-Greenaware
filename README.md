@@ -8,6 +8,7 @@ Dotenv - pip install python-dotenv
 Django Cors Headers - pip install django-cors-headers
 Djoser - pip install djoser
 Upgrade setuptools - pip install --upgrade setuptools
+pip install drf_yasg
 
 py manage.py migrate
 py manage.py run server
