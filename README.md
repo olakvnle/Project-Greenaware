@@ -11,4 +11,4 @@ Upgrade setuptools - pip install --upgrade setuptools
 pip install drf_yasg
 
 py manage.py migrate
-py manage.py run server
+py manage.py runserver
