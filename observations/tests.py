@@ -16,11 +16,11 @@ class ObservationTests(APITestCase):
             "temperatureLandSurface": 8.0,
             "temperatureSeaSurface": 10.0,
             "humidity": 5.0,
-            "windSpeed": 5.0,
+            "windSpeed": 5.0, 
             "windDirection": "23.43,43.875",
             "precipitation": 35.0,
             "haze": 29.0,
-            "notes": "The weather is weird"
+            "notes": "The weather is weird",
         }
 
     def test_create_observation(self):
