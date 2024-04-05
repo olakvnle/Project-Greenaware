@@ -8,6 +8,7 @@ Dotenv - pip install python-dotenv
 Django Cors Headers - pip install django-cors-headers
 Djoser - pip install djoser
 Upgrade setuptools - pip install --upgrade setuptools
+
 Generate swagger (Install drf-yasg) - pip install yrf-yasg
 
 py manage.py migrate
