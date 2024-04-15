@@ -152,6 +152,8 @@ SWAGGER_SETTINGS = {
             'name': 'Authorization'
         }
     },
+    'USE_SESSION_AUTH': False,  # Disable session authentication
+    'DEFAULT_AUTO_SCHEMA_CLASS': 'drf_yasg.inspectors.SwaggerAutoSchema',
 }
 
 """
@@ -176,7 +178,7 @@ EMAIL_HOST_PASSWORD = 'admin4rashkem'
 EMAIL_PORT = '587'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'admin@rashkemsoft.com.ng'
-#abiodunyekeen76@gmail.co
+#abiodunyekeen76@gmail.com
 AUTH_COOKIE = 'access'
 AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 60 * 5
 AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 60 * 24
