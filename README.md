@@ -11,7 +11,5 @@ Upgrade setuptools - pip install --upgrade setuptools
 
 Generate swagger (Install drf-yasg) - pip install drf_yasg
 
-Generate swagger (Install drf-yasg) - pip install drf_yasg
-
 py manage.py migrate
 py manage.py runserver
