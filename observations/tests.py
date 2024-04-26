@@ -12,7 +12,7 @@ class ObservationTests(APITestCase):
             "date": "2023-12-31",
             "time": "12:00:00",
             "timeZoneOffset": "UTC-10:00",
-            "coordinates": "5.42,87.32",
+            "location": "jazz.breakfast.planet",
             "temperatureLandSurface": 8.0,
             "temperatureSeaSurface": 10.0,
             "humidity": 5.0,
@@ -43,7 +43,7 @@ class ObservationTests(APITestCase):
         updated_data = {
             "date": "2024-01-01",
             "time": "13:00:00",
-            "coordinates": "10.42,20.32"
+            "location": "eat.speed.gallop"
         }
         response = self.client.put(url, updated_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
