@@ -9,12 +9,9 @@ Django Cors Headers - pip install django-cors-headers
 Djoser - pip install djoser
 Upgrade setuptools - pip install --upgrade setuptools
 
-Generate swagger (Install drf-yasg) - pip install yrf-yasg
-pip install drf_yasg
-=======
-
 Generate swagger (Install drf-yasg) - pip install drf_yasg
 
+Generate swagger (Install drf-yasg) - pip install drf_yasg
 
 py manage.py migrate
 py manage.py runserver
