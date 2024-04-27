@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from datetime import date, time
-from .models import Observation
+from observations.models import Observation
 
 User = get_user_model()
 
@@ -9,7 +9,7 @@ class ObservationModelTests(TestCase):
 
     def setUp(self):
         # Create a user instance to use for creating an Observation
-        self.user = User.objects.create_user(username='testuser', password='testpass123')
+        self.user = User.objects.create_user(email='testuser@example.com', password='testpass123')
         
         # Create an observation instance
         self.observation = Observation.objects.create(
@@ -30,7 +30,7 @@ class ObservationModelTests(TestCase):
 
     def test_observation_creation(self):
         # Test that the observation instance can be created properly
-        self.assertEqual(self.observation.user.username, 'testuser')
+        self.assertEqual(self.observation.user.email, 'testuser@example.com')
         self.assertEqual(self.observation.date, date.today())
         self.assertEqual(self.observation.timeZoneOffset, "+00:00")
         self.assertEqual(self.observation.location, "Test Location")

@@ -1,6 +1,8 @@
 from django.test import TestCase
-from yourapp.models import Country, City, Coordinates, Temperature, Wind, WeatherData
+from weathers.models import Country, City, Coordinates, Temperature, Wind, WeatherData
 from django.contrib.auth import get_user_model
+from users.models import UserAccount
+
 
 User = get_user_model()
 
@@ -9,7 +11,7 @@ class ModelTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         # Create a user for linking to WeatherData
-        cls.user = User.objects.create_user(username='testuser', email='test@example.com', password='testpass123')
+        cls.user = UserAccount.objects.create_user(email='testuser@example.com', password='testpass123')
 
         # Create instances of Country and City for use in further relations
         cls.country = Country.objects.create(name='Exampleland')
@@ -59,7 +61,7 @@ class ModelTestCase(TestCase):
         self.assertEqual(wind.direction, 'Southwest')
 
     def test_weather_data_creation(self):
-        self.assertEqual(self.weather_data.user.username, 'testuser')
+        self.assertEqual(self.weather_data.user.email, 'testuser@example.com')
         self.assertEqual(self.weather_data.city.name, 'Exampleville')
         self.assertEqual(self.weather_data.notes, 'Sunny day')
 

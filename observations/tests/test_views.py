@@ -2,8 +2,9 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 from rest_framework import status
-from observation.models import Observation
-from .serializers import ObservationSerializer
+from users.models import UserAccount
+from observations.models import Observation
+from observations.serializers import ObservationSerializer
 from datetime import date, time
 
 User = get_user_model()
@@ -11,8 +12,8 @@ User = get_user_model()
 class ObservationViewTests(TestCase):
     def setUp(self):
         # Setting up a user and client for API interaction
-        self.user = User.objects.create_user(username='testuser', email='test@example.com', password='testpass123')
         self.client = APIClient()
+        self.user = User.objects.create_user(email='testuser@example.com', password='testpass123')
         self.client.force_authenticate(user=self.user)
 
         # Creating an Observation instance to use in tests
@@ -33,7 +34,7 @@ class ObservationViewTests(TestCase):
         )
 
     def test_get_observations(self):
-        response = self.client.get('/observations/')
+        response = self.client.get('/api/v1/observations/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)  # Assumes only one observation in the database
 
@@ -53,31 +54,31 @@ class ObservationViewTests(TestCase):
             'haze': 12.0,
             'notes': "Additional observation notes."
         }
-        response = self.client.post('/observations/', data, format='json')
+        response = self.client.post('/api/v1/observations/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_get_observation_detail(self):
-        url = f'/observations/{self.observation.id}/'
+        url = f'/api/v1/observations/{self.observation.id}/'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['id'], self.observation.id)
 
     def test_put_observation_detail(self):
-        url = f'/observations/{self.observation.id}/'
+        url = f'/api/v1/observations/{self.observation.id}/'
         updated_data = ObservationSerializer(self.observation).data
         updated_data['temperatureLandSurface'] = 22.5
         response = self.client.put(url, updated_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['temperatureLandSurface'], 22.5)
+        self.assertEqual(float(response.data['temperatureLandSurface']), 22.5)
 
     def test_delete_observation_detail(self):
-        url = f'/observations/{self.observation.id}/'
+        url = f'/api/v1/observations/{self.observation.id}/'
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Observation.objects.filter(id=self.observation.id).exists())
 
     def test_user_observations(self):
-        url = f'/observations/user/{self.user.id}'
+        url = f'/api/v1/observations/user/{self.user.id}'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)  # Assumes this user has one observation
@@ -117,14 +118,14 @@ class ObservationViewTests(TestCase):
             }
         ]
 
-        response = self.client.post('/observations/bulk/', observations_data, format='json')
+        response = self.client.post('/api/v1/observations/bulk/', observations_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(len(response.data), 2)  # Check if 2 observations were returned in the response
         # Optionally, verify that the response data matches what was posted
         for i, observation_data in enumerate(observations_data):
             for key in observation_data:
                 if key != 'user':  # Excluding user as it's not returned in the serializer data
-                    self.assertEqual(str(response.data[i][key]), str(observation_data[key]))
+                    self.assertEqual(float(response.data[i][key]), float(observation_data[key]))
 
     def test_bulk_observation_incomplete_data(self):
         # Test to ensure validation works for bulk posts with incomplete data
@@ -137,5 +138,5 @@ class ObservationViewTests(TestCase):
             }
         ]
 
-        response = self.client.post('/observations/bulk/', incomplete_data, format='json')
+        response = self.client.post('/api/v1/observations/bulk/', incomplete_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
