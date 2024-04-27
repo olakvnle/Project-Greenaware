@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import UserAccount
+from users.models import UserAccount
 from django.core.exceptions import ValidationError
 
 class UserAccountModelTests(TestCase):
