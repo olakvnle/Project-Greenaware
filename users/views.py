@@ -1,8 +1,28 @@
+from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from django.conf import settings
 from rest_framework.views import status
 from rest_framework.response import Response
+from datetime import datetime, timedelta
+from djoser.views import UserViewSet as DjoserUserViewSet
+
+
+class CustomUserViewSet(DjoserUserViewSet):
+    def perform_create(self, serializer, *args, **kwargs):
+        super().perform_create(serializer)
+        # After user creation, you can add custom logic here if needed
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        if response.status_code == status.HTTP_201_CREATED:
+            # Modify the response data to include status and message
+            data = response.data
+            data['status'] = 'success'
+            data['message'] = 'Successfully created'
+            response.data = data
+        return response
+
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):

@@ -1,11 +1,13 @@
 from django.urls import path
 
 from users.views import (CustomTokenObtainPairView,
-CustomTokenRefreshView, CustomTokenVerifyView, LogoutView)
+CustomTokenRefreshView, CustomTokenVerifyView, LogoutView, CustomUserViewSet)
 
 urlpatterns = [
     path('jwt/create/', CustomTokenObtainPairView.as_view()),
     path('jwt/refresh/', CustomTokenRefreshView.as_view()),
     path('jwt/verify/', CustomTokenVerifyView.as_view()),
-    path('logout/', LogoutView.as_view())
+    path('logout/', LogoutView.as_view()),
+    path('users/', CustomUserViewSet.as_view({'post': 'create'}), name='user-create'),
+
 ]

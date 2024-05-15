@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 from os import getenv, path
-from django.core.management.utils import get_random_secret_key # for generating secret key
+from django.core.management.utils import get_random_secret_key  # for generating secret key
 import dotenv
-
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,8 +27,6 @@ dotenv_file = BASE_DIR / '.env'
 if path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
 
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -40,7 +38,7 @@ DEBUG = getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = []
 
-
+DOMAIN = getenv('DOMAIN')
 # Application definition
 
 INSTALLED_APPS = [
@@ -51,7 +49,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'weathers',
     'corsheaders',
     'djoser',
     'drf_yasg',
@@ -91,7 +88,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -101,7 +97,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -129,6 +124,7 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'users.schema_generator.CustomAutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'users.authentication.CustomJWTAuthentication',
+        # 'observations.auth.APIKeyAuthentication',
         # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
@@ -136,6 +132,8 @@ REST_FRAMEWORK = {
     ],
 
 }
+
+
 
 """
 Custom Setting for Authentication Backend
@@ -160,12 +158,17 @@ SWAGGER_SETTINGS = {
 Custom Setting for JWT Authentication by djoser
 """
 DJOSER = {
+    'SERIALIZERS': {
+        'user': 'users.serializers.UserSerializer',
+    },
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
-    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'ACTIVATION_URL': 'activate-email/{uid}/{token}',
     'USER_CREATE_PASSWORD_RETYPE': True,
     'PASSWORD_RESET_CONFIRM_RETYPE': True,
     'TOKEN_MODEL': None,
+    'TOKEN_EXPIRATION': timedelta(days=1),
+
     # 'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': allowed_redirect_uris
 
 }
@@ -178,16 +181,21 @@ EMAIL_HOST_PASSWORD = 'admin4rashkem'
 EMAIL_PORT = '587'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'admin@rashkemsoft.com.ng'
-#abiodunyekeen76@gmail.com
+
 AUTH_COOKIE = 'access'
-AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 60 * 5
+AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 60 * 24
 AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 60 * 24
 AUTH_COOKIE_SECURE = getenv('AUTH_COOKIE_SECURE', 'True') == 'True'
 AUTH_COOKIE_HTTP_ONLY = True
 AUTH_COOKIE_PATH = '/'
 AUTH_COOKIE_SAMESITE = 'None'
 
-CORS_ALLOWED_ORIGINS =[]
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = getenv(
+    'CORS_ALLOWED_ORIGINS',
+    'http://localhost:8000,http://127.0.0.1:8000'
+).split(',')
 
 SITE_NAME = 'Team 2'
 
@@ -202,7 +210,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -214,5 +221,3 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.UserAccount'
-
-

@@ -14,6 +14,7 @@ django = "*"
 python-dotenv = "*"
 pyyaml = "*"
 drf-yasg = "*"
+what3words = "*"
 
 [dev-packages]
 
