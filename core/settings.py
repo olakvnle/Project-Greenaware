@@ -199,6 +199,7 @@ CORS_ALLOWED_ORIGINS = getenv(
 
 SITE_NAME = 'Team 2'
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
