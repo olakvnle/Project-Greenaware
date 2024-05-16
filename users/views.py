@@ -24,7 +24,6 @@ class CustomUserViewSet(DjoserUserViewSet):
         return response
 
 
-
 class CustomTokenObtainPairView(TokenObtainPairView):
 
     def post(self, request, *args, **kwargs):
