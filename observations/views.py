@@ -70,7 +70,8 @@ class Observations(APIView):
 
         what3words = data.pop('location')
 
-        what3words_data, error_message = what3words_instance.process_what3words_response(what3words)
+        what3words_data, error_message = (what3words_instance.
+                                          process_what3words_response(what3words))
         if what3words_data is None:
             return Response(error_message)
 
